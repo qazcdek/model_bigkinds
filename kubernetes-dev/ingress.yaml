@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: model-dev
+  name: fastapi-dev-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: alb-model-dev
+    alb.ingress.kubernetes.io/subnets: 'subnet-009a3cc9c0f0d9674, subnet-01b0d63fdd6389210'
+    alb.ingress.kubernetes.io/security-groups: 'sg-0317f3483d1e5abd8, sg-01d1557f0d85cffcc'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:905418476415:certificate/58894b07-4c86-473d-b6f6-41cacabefc42'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: /docs
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '300'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+spec:
+  ingressClassName: 'alb'
+  rules:
+    - host: model-dev.infovisor.ai
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: model-dev
+                port:
+                  number: 80

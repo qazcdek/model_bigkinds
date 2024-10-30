@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  infovisor:
+    container_name: infovisor-test
+    build: .
+    ports:
+      - "8000:8000"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379/0
+
+  # redis:
+  #   container_name: my_redis
+  #   image: redis:6.0.18
+  #   ports:
+  #     - "6379:6379"
+
+## local test file

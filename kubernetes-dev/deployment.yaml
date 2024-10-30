@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-dev
+  namespace: model-dev
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: 905418476415.dkr.ecr.us-east-1.amazonaws.com/infovisor-model
+    argocd-image-updater.argoproj.io/image.update-strategy: latest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: model-dev
+  template:
+    metadata:
+      labels:
+        app: model-dev
+    spec:
+      containers:
+        - name: model-dev
+          image: 905418476415.dkr.ecr.us-east-1.amazonaws.com/infovisor-model:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: model-dev

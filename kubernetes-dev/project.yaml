@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: model-dev
+  namespace: argocd
+spec:
+  description: 'Project for the FastAPI development environment'
+  sourceRepos:
+    - '*'
+  destinations:
+    - namespace: argocd
+      server: 'https://kubernetes.default.svc'
+    - namespace: model-dev
+      server: 'https://kubernetes.default.svc'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

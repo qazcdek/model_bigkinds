@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: model-dev
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: 905418476415.dkr.ecr.us-east-1.amazonaws.com/infovisor-model:latest
+    argocd-image-updater.argoproj.io/update-strategy: latest
+
+spec:
+  project: model-dev
+  source:
+    repoURL: 'https://github.com/infovisor/chat-model.git'
+    targetRevision: dev
+    path: kubernetes-dev
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: model-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

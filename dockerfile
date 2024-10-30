@@ -1,0 +1,30 @@
+FROM python:3.11
+
+WORKDIR /app
+
+ARG MONGODB_URL
+ARG MONGODB_DB_NAME
+ARG MILVUS_DB_FR
+ARG MILVUS_PASSWORD
+ARG MILVUS_TOKEN
+ARG MILVUS_URI
+ARG MILVUS_USER
+ARG OPENAI_API_KEY
+
+ENV MONGODB_URL=${MONGODB_URL} \
+    MONGODB_DB_NAME=${MONGODB_DB_NAME} \
+    MILVUS_DB_FR=${MILVUS_DB_FR} \
+    MILVUS_PASSWORD=${MILVUS_PASSWORD} \
+    MILVUS_TOKEN=${MILVUS_TOKEN} \
+    MILVUS_URI=${MILVUS_URI} \
+    MILVUS_USER=${MILVUS_USER} \
+    OPENAI_API_KEY=${OPENAI_API_KEY}
+
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

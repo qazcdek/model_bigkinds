@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: model-prod
+  namespace: argocd
+
+spec:
+  project: model-prod
+  source:
+    repoURL: 'https://github.com/infovisor/chat-model.git'
+    targetRevision: main
+    path: kubernetes-prod
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: model-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

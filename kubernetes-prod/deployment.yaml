@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-prod
+  namespace: model-prod
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: 905418476415.dkr.ecr.us-east-1.amazonaws.com/infovisor-model
+    argocd-image-updater.argoproj.io/image.update-strategy: latest
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: model-prod
+  template:
+    metadata:
+      labels:
+        app: model-prod
+    spec:
+      containers:
+        - name: model-prod
+          image: 905418476415.dkr.ecr.us-east-1.amazonaws.com/infovisor-model:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: '4Gi'
+              cpu: '2'
+            limits:
+              memory: '16Gi'
+              cpu: '4'
+          ports:
+            - containerPort: 8000
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: model-prod
